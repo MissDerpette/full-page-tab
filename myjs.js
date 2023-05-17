@@ -35,7 +35,15 @@ function openPage(pageName,elmnt,color) {
       price: price
     };
 
+    output = document.querySelector("#output")
+    cardid = document.querySelector("#cardid")
+    cardName = document.querySelector("#name")
+    cardImage= document.querySelector("#image")
+
     // Send POST request to the API endpoint
+
+    let apiUrl = 'http://206.189.148.20:8080/api/create'
+
     fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -43,11 +51,31 @@ function openPage(pageName,elmnt,color) {
       },
       body: JSON.stringify(postData)
     })
-      .then(response => response.json())
+      .then(response => response.json()) //parse
+      // data manipulation
       .then(data => {
         console.log('Response:', data);
-        // Handle the response data as needed
+
+        // This unpacks the data to variables
+        const { _id, created_at, description, image, name, price } = data;
+        // 1st way
+        // created div inside div#id with the data from the api 
+        output.innerHTML = `<div class="new-data"> 
+          _id: ${_id}<br>
+          created_at: ${created_at}<br>
+          description: ${description}<br>
+          image: ${image}<br>
+          name: ${name}<br>
+          price: ${price}<br>
+        </div>`;
+        
+        // 2nd way
+        cardid.innerHTML = _id
+        cardName.innerHTML = name
+        cardImage.innerHTML = image
+    
       })
+
       .catch(error => {
         console.error('Error:', error);
         // Handle any errors that occurred during the request
