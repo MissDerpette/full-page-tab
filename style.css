@@ -73,3 +73,8 @@ div.container {
 .output-card { 
   
 }
+
+.card {
+  border: #ccc 1px solid;
+  width: 400px;
+}

@@ -22,12 +22,16 @@ function openPage(pageName,elmnt,color) {
     event.preventDefault();
 
     // Get form input values
+    // we need to get the form values
+    // then store it as variables
     const name = document.getElementById('fname').value;
     const image = document.getElementById('image').value;
     const description = document.getElementById('lname').value;
     const price = document.getElementById('price').value;
 
     // Create payload object
+    // to fix JSON STRUCTURE FOR SENDING
+    // Has to be object type
     const postData = {
       name: name,
       image: image,
@@ -35,21 +39,25 @@ function openPage(pageName,elmnt,color) {
       price: price
     };
 
-    output = document.querySelector("#output")
-    cardid = document.querySelector("#cardid")
-    cardName = document.querySelector("#name")
-    cardImage= document.querySelector("#image")
+    //1st way
+    // we need an HTML id, where to ouput
+    // for user visuals
+    html_output = document.querySelector("#output")
+
+    //2nd way
+    // cardid = document.querySelector("#cardid")
+    // cardName = document.querySelector("#name")
+    // cardImage= document.querySelector("#image")
 
     // Send POST request to the API endpoint
-
     let apiUrl = 'http://206.189.148.20:8080/api/create'
 
     fetch(apiUrl, {
-      method: 'POST',
+      method: 'POST', // get from backend
       headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(postData)
+        'Content-Type': 'application/json' // get from backend
+      }, 
+      body: JSON.stringify(postData) // frontend Form data 
     })
       .then(response => response.json()) //parse
       // data manipulation
@@ -57,22 +65,43 @@ function openPage(pageName,elmnt,color) {
         console.log('Response:', data);
 
         // This unpacks the data to variables
+        // get data properties from backend docs or postman api
+        // the response data
         const { _id, created_at, description, image, name, price } = data;
         // 1st way
-        // created div inside div#id with the data from the api 
-        output.innerHTML = `<div class="new-data"> 
-          _id: ${_id}<br>
-          created_at: ${created_at}<br>
-          description: ${description}<br>
-          image: ${image}<br>
-          name: ${name}<br>
-          price: ${price}<br>
+        // created div inside div#id with the data from the api
+
+        // _id: ${_id}<br>
+        // created_at: ${created_at}<br>
+        // description: ${description}<br>
+        // image: ${image}<br>
+        // name: ${name}<br>
+        // price: ${price}<br>
+
+        html_output.innerHTML = `
+        <div class="new-data"> 
+          
+        <div class="card">
+          <div class="image">
+            <img src="${image}">
+          </div>
+          <div class="name">
+            product name: ${name}
+          </div>
+          <div class="description">
+            description: ${description}
+          </div>
+          <div class="price">
+            price: ${price}
+          </div>
+        </div>
+
         </div>`;
         
         // 2nd way
-        cardid.innerHTML = _id
-        cardName.innerHTML = name
-        cardImage.innerHTML = image
+        // cardid.innerHTML = _id
+        // cardName.innerHTML = name
+        // cardImage.innerHTML = image
     
       })
 
